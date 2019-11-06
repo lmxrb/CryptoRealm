@@ -27,7 +27,6 @@ def updateDB(data):
         file.write(data)
         file.close()
         return json.load(open("btc.json5", "r"))
-
     else:
         print("Something went wrong and no data was collected to the database.")
 
@@ -47,3 +46,5 @@ def searchDBid(name):
 def price(data):
     value = data["priceUsd"].split('.')[0] + "." + data["priceUsd"].split('.')[1][:2]
     return data["name"] + ": " + value + " $"
+
+#TODO: Make other types of functions like price (24h volume etc)
