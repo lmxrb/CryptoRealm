@@ -13,43 +13,51 @@ class CryptoRealm(QWidget):
         self.top = 480
         self.width = 320
         self.height = 240
+        self.coinid = 0
+        self.coindata = apirequest.searchDBint(self.coinid)
         self.UI()
-        self.coin = 0
+        apirequest.updateDB(apirequest.request())
  
- 
+
+    def setCoinText(self):
+        self.cointext = QLabel(self.coinInfo(self.coindata), self)
+        self.cointext.setGeometry(QtCore.QRect(50, 90, 240, 80))
+        #self.cointext.move(70, 80)
+
+
     def UI(self):
+        #layout = QHBoxLayout()
         self.setWindowTitle('Crypto Realm')
         self.setGeometry(self.left, self.top, self.width, self.height)
-        self.button = QPushButton('Coin', self)
-        self.button.move(40, 20)
-        self.button.clicked.connect(self.askCoin)
-        self.cointext = QLabel("No Coin.", self)
-        self.cointext.setGeometry(QtCore.QRect(40, 60, 100, 80))
+        self.selector = QComboBox(self)
+        self.selector.addItems(apirequest.returnNames())
+        self.selector.currentIndexChanged.connect(self.coinSelector)
+        self.selector.move(90, 60)
+        self.setCoinText()
         self.show()
  
- 
-    def askCoin(self):
-        text, okPressed = QInputDialog.getText(self, "Coin chooser", "Coin name:", QLineEdit.Normal, "")
-        if okPressed and text != '':
-            self.coin = text.lower()
- 
- 
+
+    def coinSelector(self, i):
+        self.coinid = i
+        self.coindata = apirequest.searchDBint(self.coinid)
+        self.updateEverything()
+
+
+    def coinInfo(self, data):
+        return "Live price: " + apirequest.price(data) + " $\nTraded in the last 24 Hours: " + apirequest.traded24hr(data) + " $\nPrice change in the last 24 Hours: " + apirequest.pricechange(data) + " %\nAvailable for trading: " + apirequest.supply(data) + " " + data["symbol"]
+
+
     def updateEverything(self):
-        if(self.coin != 0):
-            coindata = apirequest.searchDBid(self.coin)
-            if (coindata != None):
-                coinstats = apirequest.price(coindata) + "\n" + apirequest.pricechange(coindata) +"\n" + apirequest.traded24hr(coindata)
-                self.cointext.setText(coinstats)
-            else:
-                self.cointext.setText("Invalid Coin ID")
+        self.coindata = apirequest.searchDBint(self.coinid)
+        self.cointext.setText(self.coinInfo(self.coindata))
+
  
     #TODO Track everything related to the coin not just price
-    #TODO Search bar for the coins
  
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = CryptoRealm()
     timer = QtCore.QTimer()
     timer.timeout.connect(ex.updateEverything)
-    timer.start(300)
+    timer.start(1500)
     sys.exit(app.exec_())

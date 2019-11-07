@@ -36,21 +36,37 @@ def searchDBint(id):
         return filedict["data"][id]
     else:
         return 0
- 
-def searchDBid(name):
+
+#TODO: Maybe unused?
+#def searchDBid(name):
+ #   filedict = updateDB(request())
+  #  for id in range(100):
+   #     if filedict["data"][id]["id"] == name:
+    #        return searchDBint(id)
+
+def returnNames():
+    names = []
     filedict = updateDB(request())
     for id in range(100):
-        if filedict["data"][id]["id"] == name:
-            return searchDBint(id)
+        names.append(filedict["data"][id]["name"])
+    return names
+
 
 def price(data):
-    value = data["priceUsd"].split('.')[0] + "." + data["priceUsd"].split('.')[1][:4]
-    return data["name"] + ": " + value + " $"
-    
+    return data["priceUsd"].split('.')[0] + "." + data["priceUsd"].split('.')[1][:4]
+
+
 def pricechange(data):
- 	return "Change in the last 24 hours: " + data["changePercent24Hr"].split('.')[0] + "." + data["changePercent24Hr"].split('.')[1][:2] + "%"
- 	
+ 	return data["changePercent24Hr"].split('.')[0] + "." + data["changePercent24Hr"].split('.')[1][:2]
+
+
 def traded24hr(data):
-	return "Amount traded in the last 24 hours: " + data["volumeUsd24Hr"].split('.')[0] + "." + data["volumeUsd24Hr"].split('.')[1][:2] + " $"
- 
-#TODO: Make other types of functions like price (24h volume etc)
+	return data["volumeUsd24Hr"].split('.')[0] + "." + data["volumeUsd24Hr"].split('.')[1][:2]
+
+
+def supply(data):
+    return data["supply"].split('.')[0]
+
+
+#TODO: Don't forget that the currency in the top 100 can change and some might become unavailable... Find an alternative around that.
+#TODO: Get only individual data for each currency (maybe using a for loop or something)
