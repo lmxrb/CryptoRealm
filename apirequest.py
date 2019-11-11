@@ -12,7 +12,8 @@ import json
 #priceUsd               Volume-weighted price based on real-time market data, translated to USD
 #changePercent24Hr      The direction and value change in the last 24 hours
 #vwap24Hr               Volume Weighted Average Price in the last 24 hours
- 
+
+ #TODO: MAKE AN INIT FUNCTION TO READ THE NAMES OF THE COINS AND THEN ASK FOR THEM INDIVIDUALLY
  
 def request():
     url = 'https://api.coincap.io/v2/assets/'
@@ -27,7 +28,7 @@ def updateDB(data):
         #file.write(data)
         #file.close()
         #return json.load(open("btc.json5", "r"))
-        return json.load(data)
+        return json.loads(data)
     else:
         print("Something went wrong and no data was collected to the database.")
  
@@ -62,5 +63,6 @@ def supply(data):
     return data["supply"].split('.')[0]
 
 
-#TODO: Don't forget that the currency in the top 100 can change and some might become unavailable... Find an alternative around that.
-#TODO: Get only individual data for each currency (maybe using a for loop or something)
+#TODO: Don't forget that the currency in the top 100 can change and some might become unavailable...
+# Find an alternative around that.
+
