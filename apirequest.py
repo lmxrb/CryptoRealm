@@ -23,10 +23,11 @@ def request():
  
 def updateDB(data):
     if (data):
-        file = open("btc.json5", "w+")
-        file.write(data)
-        file.close()
-        return json.load(open("btc.json5", "r"))
+        #file = open("btc.json5", "w+")
+        #file.write(data)
+        #file.close()
+        #return json.load(open("btc.json5", "r"))
+        return json.load(data)
     else:
         print("Something went wrong and no data was collected to the database.")
  
@@ -36,13 +37,6 @@ def searchDBint(id):
         return filedict["data"][id]
     else:
         return 0
-
-#TODO: Maybe unused?
-#def searchDBid(name):
- #   filedict = updateDB(request())
-  #  for id in range(100):
-   #     if filedict["data"][id]["id"] == name:
-    #        return searchDBint(id)
 
 def returnNames():
     names = []
